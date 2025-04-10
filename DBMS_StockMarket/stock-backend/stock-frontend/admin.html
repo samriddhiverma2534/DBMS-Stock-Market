@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Stock App</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <!-- Top Nav -->
+  <div class="top-nav">
+    <div class="logo"> 👤 My Profile</div>
+    <ul class="top-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="stocks.html">Stocks</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="watchlist.html">Watchlist</a></li>
+      <li><a href="admin.html">Admin</a></li>
+    </ul>
+  </div>
+
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="profile">
+        <img src="https://via.placeholder.com/60" alt="User" />
+        <div class="user-section">
+          <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Avatar" class="center-avatar">
+          <h2 id="user-name" class="center-greeting">Hi, User</h2>
+        </div>
+      </div>
+      <ul class="nav-list">
+        <li><a href="#">🏦 Bank & AutoPay</a></li>
+        <li><a href="#">📈 External Investments</a></li>
+        <li><a href="watchlist.html">⭐ Watchlist</a></li>
+        <li><a href="#">📝 Orders</a></li>
+        <li><a href="#">🔁 SIPs</a></li>
+        <li><a href="#" onclick="showSection('help-support')">📞 Help & Support</a></li>
+        <li><a href="#" onclick="showSection('settings')">⚙️ Settings</a></li>
+        <li><a href="index.html" class="logout">🚪 Log Out</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>👤  Profile</h1>
+      <div class="stats-grid">
+        <div class="card">
+          <h2>Total Investments</h2>
+          <p>₹ 2,50,000</p>
+        </div>
+        <div class="card">
+          <h2>Stocks Invested</h2>
+          <p>10</p>
+        </div>
+        <div class="card">
+          <h2>Last Transaction</h2>
+          <p>₹ 15,000 - Tata Consumer</p>
+        </div>
+      </div>
+
+      <!-- Help & Support Section -->
+      <section id="help-support" class="admin-section" style="display: none;">
+        <h2>📞 Help & Support</h2>
+        <div class="help-section">
+          <h3>📚 Frequently Asked Questions</h3>
+          <ul>
+            <li><strong>Q:</strong> How do I buy a stock?<br><strong>A:</strong> Go to the Stocks page and click on Buy.</li>
+            <li><strong>Q:</strong> How to view my Watchlist?<br><strong>A:</strong> Click on the Watchlist tab in the top menu.</li>
+          </ul>
+
+          <h3>📄 Terms & Conditions</h3>
+          <p>By using this app, you agree to our terms of service, investment policies, and risk disclosures.</p>
+
+          <h3>🔐 Privacy Policy</h3>
+          <p>We prioritize your data privacy. Your information is stored securely and never sold or shared.</p>
+
+          <h3>📨 Raise a Concern</h3>
+          <form id="concern-form">
+            <textarea placeholder="Describe your issue..." required></textarea><br>
+            <button type="submit">Submit Concern</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section id="settings" class="admin-section" style="display: none;">
+        <h2>⚙️ Account Settings</h2>
+        <form id="settings-form">
+          <label>Username:<br><input type="text" name="username" required></label><br><br>
+          <label>New Password:<br><input type="password" name="password"></label><br><br>
+          <label>Email Address:<br><input type="email" name="email" required></label><br><br>
+          <label>Mobile Number:<br><input type="tel" name="mobile" required></label><br><br>
+          <button type="submit">Save Changes</button>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <!-- Script to show username -->
+  <script>
+    const username = localStorage.getItem("username");
+    if (username) {
+      document.getElementById("user-name").textContent = `Hi, ${username}`;
+    }
+
+    function showSection(id) {
+      document.querySelectorAll('.admin-section').forEach(section => {
+        section.style.display = 'none';
+      });
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // Submit Settings
+    document.getElementById("settings-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = {
+        username: this.username.value,
+        password: this.password.value,
+        email: this.email.value,
+        mobile: this.mobile.value
+      };
+      fetch("/api/update_settings", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert("Error updating settings"));
+    });
+
+    // Submit Concern
+    document.getElementById("concern-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const concern = this.querySelector("textarea").value;
+      fetch("/api/raise_concern", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ concern })
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert("Error submitting concern"));
+    });
+  </script>
+  <script>
+    document.getElementById("settings-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+    
+      const formData = {
+        username: this.username.value,
+        password: this.password.value,
+        email: this.email.value,
+        mobile: this.mobile.value
+      };
+    
+      fetch("/api/update_settings", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(formData)
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert("Error updating settings"));
+    });
+    
+    document.getElementById("concern-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+    
+      const concern = this.querySelector("textarea").value;
+    
+      fetch("/api/raise_concern", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({concern})
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert("Error submitting concern"));
+    });
+    </script>    
+</body>
+</html>

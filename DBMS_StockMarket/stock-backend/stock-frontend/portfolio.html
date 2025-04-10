@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stock Portfolio - Groww Style</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .navbar {
+      background-color: #0f172a;
+      padding: 1rem 2rem;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+    }
+
+    .container {
+      padding: 2rem;
+    }
+
+    .stock-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .info {
+      flex: 2;
+    }
+
+    .info h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    .info p {
+      margin: 0.2rem 0;
+    }
+
+    .chart {
+      width: 300px;
+      height: 100px;
+    }
+  </style>
+<body>
+  <div class="navbar">
+    <h2>My Portfolio</h2>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="stock.html">Live Trend</a>
+      <a href="watchlist.html">Watchlist</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="stock-card">
+      <div class="info">
+        <h2>Bajaj Finance (BAJFINANCE)</h2>
+        <p>Market Price: ₹8739</p>
+        <p>Closing Price: ₹8650</p>
+      </div>
+      <canvas id="chart-bajaj" class="chart"></canvas>
+    </div>
+
+    <div class="stock-card">
+      <div class="info">
+        <h2>Vedanta Ltd (VEDL)</h2>
+        <p>Market Price: ₹402.50</p>
+        <p>Closing Price: ₹420.00</p>
+      </div>
+      <canvas id="chart-vedanta" class="chart"></canvas>
+    </div>
+
+    <div class="stock-card">
+      <div class="info">
+        <h2>Jindal Steel and Power Ltd (JINDALSTEL)</h2>
+        <p>Market Price: ₹675.80</p>
+        <p>Closing Price: ₹670.00</p>
+      </div>
+      <canvas id="chart-jindal" class="chart"></canvas>
+    </div>
+
+    <div class="stock-card">
+      <div class="info">
+        <h2>Aurobindo Pharma (AUROPHARMA)</h2>
+        <p>Market Price: ₹860.20</p>
+        <p>Closing Price: ₹850.00</p>
+      </div>
+      <canvas id="chart-auro" class="chart"></canvas>
+    </div>
+
+    <div class="stock-card">
+      <div class="info">
+        <h2>Adani Enterprises (ADANIENT)</h2>
+        <p>Market Price: ₹2230.45</p>
+        <p>Closing Price: ₹2210.00</p>
+      </div>
+      <canvas id="chart-adani" class="chart"></canvas>
+    </div>
+
+    <div class="stock-card">
+      <div class="info">
+        <h2>Hindustan Unilever (HINDUNILVR)</h2>
+        <p>Market Price: ₹2485.75</p>
+        <p>Closing Price: ₹2500.00</p>
+      </div>
+      <canvas id="chart-hul" class="chart"></canvas>
+    </div>
+
+    <div class="stock-card">
+      <div class="info">
+        <h2>Reliance Industries (RELIANCE)</h2>
+        <p>Market Price: ₹2745.30</p>
+        <p>Closing Price: ₹2700.00</p>
+      </div>
+      <canvas id="chart-reliance" class="chart"></canvas>
+    </div>
+
+    <div class="stock-card">
+      <div class="info">
+        <h2>Mahindra & Mahindra Ltd (M&M)</h2>
+        <p>Market Price: ₹1480.00</p>
+        <p>Closing Price: ₹1460.00</p>
+      </div>
+      <canvas id="chart-mm" class="chart"></canvas>
+    </div>
+
+    <div class="stock-card">
+      <div class="info">
+        <h2>ITC Ltd (ITC)</h2>
+        <p>Market Price: ₹425.20</p>
+        <p>Closing Price: ₹430.00</p>
+      </div>
+      <canvas id="chart-itc" class="chart"></canvas>
+    </div>
+
+    <div class="stock-card">
+      <div class="info">
+        <h2>Tata Consumers (TATACONSUM)</h2>
+        <p>Market Price: ₹845.90</p>
+        <p>Closing Price: ₹840.00</p>
+      </div>
+      <canvas id="chart-tata" class="chart"></canvas>
+    </div>
+  </div>
+  <div class="stock-card">
+    <div class="info">
+      <h2>HDFC Bank (HDFCBANK)</h2>
+      <p>Market Price: ₹1816.80</p>
+      <p>Closing Price: ₹1426.80</p>
+    </div>
+    <canvas id="chart-hdfc" class="chart"></canvas>
+  </div>
+  <div class="stock-card">
+    <div class="info">
+      <h2>Bharti Airtel (BHARTIARTL)</h2>
+      <p>Market Price: ₹1740.50</p>
+      <p>Closing Price: ₹1747.00</p>
+    </div>
+    <canvas id="chart-bharti" class="chart"></canvas>
+  </div>
+  <div class="stock-card">
+    <div class="info">
+      <h2>Infosys (INFY)</h2>
+      <p>Market Price: ₹1456.10</p>
+      <p>Closing Price: ₹1460.00</p>
+    </div>
+    <canvas id="chart-infosys" class="chart"></canvas>
+  </div>
+  <div class="stock-card">
+    <div class="info">
+      <h2>Larsen & Tourbo (LT)</h2>
+      <p>Market Price: ₹3259.00</p>
+      <p>Closing Price: ₹3400.00</p>
+    </div>
+    <canvas id="chart-larsen" class="chart"></canvas>
+  </div>
+  <div class="stock-card">
+    <div class="info">
+      <h2>Sun Pharmaceutical Industries (SUNPHARMA)</h2>
+      <p>Market Price: ₹1705.00</p>
+      <p>Closing Price: ₹1778.85</p>
+    </div>
+    <canvas id="chart-sunpharma" class="chart"></canvas>
+  </div>
+  <div class="stock-card">
+    <div class="info">
+      <h2>HCL Technologies (HCLTECH)</h2>
+      <p>Market Price: ₹1427.00</p>
+      <p>Closing Price: ₹1449.00</p>
+    </div>
+    <canvas id="chart-hcl" class="chart"></canvas>
+  </div>
+  <div class="stock-card">
+    <div class="info">
+      <h2>National Thermal Power Corporation (NTPC)</h2>
+      <p>Market Price: ₹350.40</p>
+      <p>Closing Price: ₹358.85</p>
+    </div>
+    <canvas id="chart-ntpc" class="chart"></canvas>
+  </div>
+  <!-- Chatbot Icon in Bottom Right -->
+<div id="chatbot-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+  <img src="https://images.scalebranding.com/chatbot-woman-logo-0a79f97c-1fde-4cf9-8796-dbbbac54bb34.jpg" 
+       alt="Chatbot" 
+       style="width: 65px; height: 65px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);" 
+       onclick="window.location.href='/chatbot'" />
+</div>
+
+
+
+  <script>
+    function createChart(canvasId, data) {
+      new Chart(document.getElementById(canvasId), {
+        type: 'line',
+        data: {
+          labels: Array.from({ length: data.length }, (_, i) => i + 1),
+          datasets: [{
+            data: data,
+            borderColor: 'rgba(0, 200, 83, 1)',
+            backgroundColor: 'rgba(0, 200, 83, 0.2)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: false,
+          scales: {
+            x: { display: false },
+            y: { display: false }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+  
+    // Mock chart data for all stocks
+    createChart("chart-bajaj", [8500, 8600, 8650, 8700, 8739]);
+    createChart("chart-vedanta", [440, 430, 420, 410, 402.5]);
+    createChart("chart-jindal", [660, 665, 670, 673, 675.8]);
+    createChart("chart-auro", [830, 845, 850, 855, 860.2]);
+    createChart("chart-adani", [2200, 2210, 2220, 2230, 2230.45]);
+    createChart("chart-hul", [2510, 2500, 2480, 2470, 2485.75]);
+    createChart("chart-reliance", [2650, 2680, 2700, 2725, 2745.3]);
+    createChart("chart-mm", [1400, 1420, 1440, 1460, 1480]);
+    createChart("chart-itc", [440, 435, 432, 428, 425.2]);
+    createChart("chart-tata", [820, 830, 835, 840, 845.9]);
+    createChart("chart-hdfc", [1350, 1380, 1400, 1500, 1816.8]);
+    createChart("chart-bharti", [1600, 1650, 1700, 1725, 1740.5]);
+    createChart("chart-infosys", [1400, 1420, 1435, 1450, 1456.1]);
+    createChart("chart-larsen", [3100, 3150, 3200, 3300, 3259]);
+    createChart("chart-sunpharma", [1650, 1680, 1700, 1750, 1705]);
+    createChart("chart-hcl", [1380, 1400, 1410, 1430, 1427]);
+    createChart("chart-ntpc", [330, 340, 345, 355, 350.4]);
+  </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login / Signup - Groww Style</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #1e88e5;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #1e88e5;
+      color: white;
+      border: none;
+      font-weight: bold;
+    }
+    .toggle-link {
+      text-align: center;
+      margin-top: 1rem;
+      color: #1e88e5;
+      cursor: pointer;
+    }
+    .captcha-box {
+      background: #e0e0e0;
+      padding: 10px;
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2 id="formTitle">Login</h2>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="signupForm" style="display:none;">
+      <input type="text" id="signupName" placeholder="Name" required />
+      <input type="tel" id="signupPhone" placeholder="Phone Number" required />
+      <input type="email" id="signupEmail" placeholder="Email" required />
+      <input type="password" id="signupPassword" placeholder="Password" required />
+      <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required />
+      
+      <div class="captcha-box" id="generatedCaptcha"></div>
+      <input type="text" id="enteredCaptcha" placeholder="Enter CAPTCHA" required />
+
+      <button type="submit">Signup</button>
+    </form>
+
+    <div class="toggle-link" onclick="toggleForm()">Don't have an account? Signup</div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const formTitle = document.getElementById("formTitle");
+    const toggleLink = document.querySelector(".toggle-link");
+    const captchaDisplay = document.getElementById("generatedCaptcha");
+
+    function toggleForm() {
+      if (loginForm.style.display === "none") {
+        loginForm.style.display = "block";
+        signupForm.style.display = "none";
+        formTitle.textContent = "Login";
+        toggleLink.textContent = "Don't have an account? Signup";
+      } else {
+        loginForm.style.display = "none";
+        signupForm.style.display = "block";
+        formTitle.textContent = "Signup";
+        toggleLink.textContent = "Already have an account? Login";
+        generateCaptcha();
+      }
+    }
+
+    function generateCaptcha() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let captcha = '';
+      for (let i = 0; i < 6; i++) {
+        captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      captchaDisplay.textContent = captcha;
+    }
+
+    // LOGIN FORM SUBMISSION
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        localStorage.setItem("username", user.name); // Save name for later
+        alert("Login successful!");
+        window.location.href = "dashboard.html";
+      } else {
+        alert("Invalid email or password.");
+      }
+    });
+
+    // SIGNUP FORM SUBMISSION
+    signupForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("signupName").value;
+      const phone = document.getElementById("signupPhone").value;
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+      const confirmPassword = document.getElementById("signupConfirmPassword").value;
+      const enteredCaptcha = document.getElementById("enteredCaptcha").value;
+      const actualCaptcha = captchaDisplay.textContent;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      if (enteredCaptcha !== actualCaptcha) {
+        alert("Incorrect CAPTCHA.");
+        generateCaptcha();
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      if (users.some(user => user.email === email)) {
+        alert("User already exists with this email.");
+        return;
+      }
+
+      users.push({ name, phone, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("username", name); // Save name for later
+
+      alert("Signup successful!");
+      window.location.href = "dashboard.html";
+    });
+  </script>
+
+</body>
+</html>

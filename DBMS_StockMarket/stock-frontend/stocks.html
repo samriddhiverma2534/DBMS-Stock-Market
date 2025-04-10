@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📈 Stocks - StockGrow</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: #1a1a1a;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:nth-child(3) {
+      color: #ff4d4d;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 30px;
+      color: #e91e63;
+    }
+
+    #chartContainer {
+      width: 90%;
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    select, button {
+      padding: 12px;
+      font-size: 16px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔗 Navigation -->
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="dashboard.html">📊 Dashboard</a>
+    <a href="stocks.html">📈 Stocks</a>
+    <a href="portfolio.html">💼 Portfolio</a>
+    <a href="watchlist.html">⭐ Watchlist</a>
+    <a href="admin.html">⚙️ Admin</a>
+  </nav>
+
+  <h1>Live NSE Stock Trends</h1>
+
+  <!-- Dropdown to select stock -->
+  <div style="text-align: center;">
+    <select id="stockSelect">
+      <option value="RELIANCE.NS">Reliance</option>
+      <option value="TATACONSUM.NS">Tata Consumers</option>
+      <option value="INFY.NS">Infosys</option>
+      <option value="HDFCBANK.NS">HDFC Bank</option>
+      <option value="ITC.NS">ITC Ltd</option>
+      <option value="BAJFINANCE.NS">Bajaj Finance</option>
+      <option value="VEDL.NS">Vedanta Ltd</option>
+      <option value="JINDALSTEL.NS">Jindal Steel & Power</option>
+      <option value="AUROPHARMA.NS">Aurobindo Pharma</option>
+      <option value="ADANIENT.NS">Adani Enterprises</option>
+      <option value="HINDUNILVR.NS">Hindustan Unilever</option>
+      <option value="M&M.NS">Mahindra & Mahindra</option>
+      <option value="BHARTIARTL.NS">Bharti Airtel</option>
+      <option value="LT.NS">Larsen & Toubro</option>
+      <option value="SUNPHARMA.NS">Sun Pharma</option>
+      <option value="HCLTECH.NS">HCL Technologies</option>
+      <option value="NTPC.NS">NTPC</option>
+    </select>
+
+    <button onclick="loadStock()">Load Trend</button>
+  </div>
+
+  <!-- Chart Container -->
+  <div id="chartContainer">
+    <canvas id="stockChart"></canvas>
+  </div>
+
+  <!-- Chart Script -->
+  <script>
+    let chart;
+
+    async function loadStock() {
+      const symbol = document.getElementById('stockSelect').value;
+      const apiKey = 'BVTMWMH871JW2D9F'; // Your Alpha Vantage API key
+      const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=5min&apikey=${apiKey}`;
+
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+        const timeSeries = result["Time Series (5min)"];
+
+        if (!timeSeries) {
+          alert("API Error or Rate Limit Exceeded.");
+          return;
+        }
+
+        const labels = Object.keys(timeSeries).slice(0, 30).reverse();
+        const prices = labels.map(time => parseFloat(timeSeries[time]["4. close"]));
+        const volumes = labels.map(time => parseInt(timeSeries[time]["5. volume"]));
+
+        if (chart) chart.destroy();
+
+        chart = new Chart(document.getElementById('stockChart'), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                type: 'line',
+                label: `${symbol} Price (INR)`,
+                data: prices,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                yAxisID: 'y1'
+              },
+              {
+                type: 'bar',
+                label: 'Volume',
+                data: volumes,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                yAxisID: 'y2'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            },
+            stacked: false,
+            scales: {
+              y1: {
+                type: 'linear',
+                position: 'left',
+                title: { display: true, text: 'Price (INR)' }
+              },
+              y2: {
+                type: 'linear',
+                position: 'right',
+                grid: { drawOnChartArea: false },
+                title: { display: true, text: 'Volume' }
+              }
+            }
+          }
+        });
+
+        // Send to backend
+        await fetch('/store', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            symbol,
+            data: labels.map((time, i) => ({
+              time, close: prices[i], volume: volumes[i]
+            }))
+          })
+        });
+
+      } catch (error) {
+        console.error("Error loading stock data", error);
+        alert("Failed to load stock data.");
+      }
+    }
+  </script>
+</body>
+</html>

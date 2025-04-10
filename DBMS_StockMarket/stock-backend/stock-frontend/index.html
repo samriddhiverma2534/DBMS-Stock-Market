@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Stock Predictor Home</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .background {
+      background-image: url('https://bsmedia.business-standard.com/_media/bs/img/misc/2023-03/21/full/market-stocks-stock-market-trading-stock-market-1679390474-25992620.jpg?im=FeatureCrop,size=(826,465)');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      height: 100vh;
+      width: 100%;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.7); /* Increased opacity to 70% */
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      color: #ff4d4d; /* Light red fill */
+      border: 4px solid #ff073a; /* Neon red border */
+      padding: 20px 40px;
+      border-radius: 15px;
+      text-shadow: 0 0 8px #ff073a, 0 0 15px #ff073a;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      background-color: #ff073a;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 0 10px #ff073a;
+    }
+
+    .btn:hover {
+      background-color: #d9042f;
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <div class="overlay">
+      <h1>AI-Powered Stock Market Predictor</h1>
+      <a href="login.html" class="btn">Login</a>
+    </div>
+  </div>
+</body>
+</html>
